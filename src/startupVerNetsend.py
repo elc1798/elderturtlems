@@ -11,7 +11,7 @@ from email.mime.text import MIMEText
 
 #Grab Password
 
-config = open('tetconfig.txt')
+config = open('turtleconfig.txt')
 pw = config.readline()
 
 #Grab Username
