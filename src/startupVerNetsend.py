@@ -11,8 +11,24 @@ from email.mime.text import MIMEText
 
 #Grab Password
 
-config = open('turtleconfig.txt')
+config = open('turtleconfigs.txt')
 pw = config.readline()
+
+#Error Handling
+if pw[0] = '[':
+  response = str(raw_input('It seems your configurations have not been set correctly. Set now?'))
+  if response.upper() = 'Y' or response.upper() = 'YES':
+    config.close()
+    config = open('turtleconfigs.txt' , 'w')
+    passname = ''
+    password = str(raw_input('Password: '))
+    username = str(raw_input('Email: '))
+    passname = password + '\n' + username
+    config.write(passname)
+    config.close
+    config = open('turtleconfigs.txt')
+  else:
+    quit()
 
 #Grab Username
 
