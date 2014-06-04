@@ -28,6 +28,7 @@ if pw[0] = '[':
     config.close
     config = open('turtleconfigs.txt')
   else:
+    print('Program exiting...')
     quit()
 
 #Grab Username
