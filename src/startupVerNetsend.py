@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import getpass
 import smtplib
+import Tkinter
+import tkMessageBox
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -71,3 +73,4 @@ s.login(me , pw)
 # and message to send - here it is sent as one string.
 s.sendmail(me, you, msg.as_string())
 s.quit()
+tkMessageBox.showinfo("TETSV" , "The Elder Turtle has relayed your IP Address to your email.")
