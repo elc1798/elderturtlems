@@ -1,5 +1,9 @@
 The Elder Turtle Messaging Service - A tiny messaging service written in Python
 
+The Elder Turtle IP Checker depends on curl.
+Use apt-get install curl
+to install
+
 Use run.sh to run the normal messaging service.
 'cd' into the elderturtlems directory.
 To give run.sh executable permissions, type:
