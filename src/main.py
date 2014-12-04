@@ -6,14 +6,15 @@ def textHandler():
 	#Format the text: every 65 or more characters = new line
 	characterCount = 0
 	L = complaint.split()
+	#print(L)
 	complaint = "\n"
 	while len(L) > 0:
 		if characterCount >= 65:
-			complaint += L[0] + "\n"
+			complaint += L[0].replace("\\n" , "\n") + "\n"
 			characterCount = 0
 		else:
-			complaint += L[0] + ' '
-			characterCount += len(L[0])
+			complaint += L[0].replace("\\n" , "\n") + ' '
+			characterCount += len(L[0].replace("\\n" , "\n"))
 		L.pop(0)
 	#Debug: Check the format via displaying message in Terminal:
 	#print(complaint)

@@ -11,7 +11,6 @@ if [ "$CONTINUEYN" = "y" ] || [ "$CONTINUEYN" = "yes" ] || [ "$CONTINUEYN" = "Y"
 	./connectivity.sh
 elif [ "$CONTINUEYN" = "n" ] || [ "$CONTINUEYN" = "no" ] || [ "$CONTINUEYN" = "N" ] ; then 
 	echo "IP Will not be sent with the message."
-	sleep 3
 else
 	echo "Invalid response."
 	echo "Run script again, and enter y or n and hit [ENTER]"
