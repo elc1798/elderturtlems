@@ -31,7 +31,8 @@ f = open('MESSAGE.txt')
 MESSAGE = f.read()
 f.close()
 
-html = "<html><head></head><body><p>" + MESSAGE + "</p></body></html>"
+MESSAGE = "<p>" + MESSAGE.replace("\n" , "</p> <p>") + "</p>"
+html = "<html><head></head><body>" + MESSAGE + "</body></html>"
 
 # Record the MIME types of both parts - text/plain and text/html.
 part1 = MIMEText(text, 'plain')

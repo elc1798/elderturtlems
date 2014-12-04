@@ -1,7 +1,9 @@
 #!/bin/bash
 
-cd src
+cd ~/Development/elderturtlems/src
+pwd
 
+echo "" > MESSAGE.txt
 echo "Do you wish to include your IP Address in the message?"
 read -p "y or n: " CONTINUEYN
 if [ "$CONTINUEYN" = "y" ] || [ "$CONTINUEYN" = "yes" ] || [ "$CONTINUEYN" = "Y" ] ; then
