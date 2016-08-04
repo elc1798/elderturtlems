@@ -5,50 +5,85 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-###
-### Login Sequence:
-###
+import config
 
-user_lgin = str(raw_input("Username (Include @service.com): "))
-password_lgin = str(getpass.getpass())
+from urllib2 import urlopen
 
-# me == my email address
-# you == recipient's email address
-me = user_lgin
-you = str(raw_input("Recipient: "))
+class Sender:
+    def __init__(self, username=config.EMAIL, password=config.PASSWORD,
+            subject="", message="", recipient=""):
+        """
+        Initializer for Sender class. If username and password are not given as
+        parameters, then it wil default to those set in the config file
+        """
+        self.username = username
+        self.password = password
+        self.subject = subject
+        self.message = message
+        self.recipient = recipient
 
-# Create message container - the correct MIME type is multipart/alternative.
-msg = MIMEMultipart('alternative')
-msg['Subject'] = "The Elder Turtle Hath Spoken!"
-msg['From'] = me
-msg['To'] = you
+    def interactive_login(self, username=""):
+        """
+        Prompts the user to enter login credentials in the terminal
+        """
+        if username == "":
+            print "Enter your username. If you do not include the '@service.domain', then it will default to 'gmail.com'"
+            self.username = str(raw_input("Username: "))
+        else:
+            self.username = username
+        if len(self.username.split("@")) == 1:
+            self.username += "@gmail.com"
+        self.password = str(getpass.getpass("Password: "))
 
-# Create the body of the message (a plain-text and an HTML version).
-text = "Hi!\nHow are you?\nHere is the link you wanted:\nhttp://www.python.org"
+    def get_ip(self):
+        return urlopen('http://ip.42.pl/raw').read()
 
-#Grab MESSAGE From File
-f = open('MESSAGE.txt')
-MESSAGE = f.read()
-f.close()
+    def send_message(self, subject=None, message=None, recipient=None):
+        """
+        Sends the message to the recipient using the username and password. If
+        the message or recipient are not specified, it will assume they have
+        been set already
+        """
+        if not subject:
+            subject = self.subject
+        if not message:
+            message = self.message
+        if not recipient:
+            recipient = self.recipient
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = self.username
+        msg['To'] = recipient
+        message = "<p> %s </p>" % (message.replace("\n", "</p><br><p>"),)
 
-MESSAGE = "<p>" + MESSAGE.replace("\n" , "</p> <p>") + "</p>"
-html = "<html><head></head><body>" + MESSAGE + "</body></html>"
+        # Add IP to message
+        message += "<br><br><p>---</p><br><p> Sent from <b>%s</b></p>" % (self.get_ip(),)
 
-# Record the MIME types of both parts - text/plain and text/html.
-part1 = MIMEText(text, 'plain')
-part2 = MIMEText(html, 'html')
+        plaintext = message
+        html = "<html><head></head><body> %s </body></html>" % (message,)
 
-# Attach parts into message container.
-# According to RFC 2046, the last part of a multipart message, in this case
-# the HTML message, is best and preferred.
-msg.attach(part1)
-msg.attach(part2)
-# Send the message via local SMTP server.
-#s = smtplib.SMTP('localhost')
-s = smtplib.SMTP(host='smtp.gmail.com:587')
-s.starttls()
-s.login(user_lgin , password_lgin)
-# sendmail function takes 3 arguments: sender's address, recipient's address
-# and message to send - here it is sent as one string.
-s.sendmail(me, you, msg.as_string())
-s.quit()
+        # Record the MIME types of both parts - text/plain and text/html.
+        part1 = MIMEText(plaintext, 'plain')
+        part2 = MIMEText(html, 'html')
+
+        # Attach parts into message container.
+        # According to RFC 2046, the last part of a multipart message, in this
+        # case the HTML message, is best and preferred.
+        msg.attach(part1)
+        msg.attach(part2)
+
+        # Send the message via Gmail SMTP server
+        s = smtplib.SMTP(host='smtp.gmail.com:587')
+        s.starttls()
+        s.login(self.username, self.password)
+
+        # sendmail function takes 3 arguments: sender's address, recipient's address
+        # and message to send - here it is sent as one string.
+        s.sendmail(self.username, recipient, msg.as_string())
+        s.quit()
+
+    def set_message(self, message):
+        self.message = message
+
+    def set_recipient(self, recipient):
+        self.recipient = recipient
